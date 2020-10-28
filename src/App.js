@@ -22,7 +22,7 @@ function App() {
       } else {
         // The user is logged out
         dispatch({
-          type: "set_USER",
+          type: "SET_USER",
           user: null,
         });
       }

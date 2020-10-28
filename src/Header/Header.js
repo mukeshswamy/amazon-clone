@@ -4,14 +4,13 @@ import SearchIcon from "@material-ui/icons/Search";
 import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 import { Link } from "react-router-dom";
 import { useStateValue } from "../StateProvider";
-// import { ShoppingBasket } from "@material-ui/icons";
 import { auth } from "firebase";
 
 function Header() {
   const [{ basket, user }, dispatch] = useStateValue();
   const handelAuthentication = () => {
     if (user) {
-      auth.signOut();
+      auth().signOut();
     }
   };
   return (
