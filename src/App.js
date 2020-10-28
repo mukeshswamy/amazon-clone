@@ -13,7 +13,6 @@ function App() {
   useEffect(() => {
     // will only run once when the app component loads..
     auth.onAuthStateChanged((authUser) => {
-      console.log("the user is >>>>>>", authUser);
       if (authUser) {
         // The user Just Logged in / The user was looged in
         dispatch({
@@ -21,7 +20,7 @@ function App() {
           user: authUser,
         });
       } else {
-        // The user is logged our
+        // The user is logged out
         dispatch({
           type: "set_USER",
           user: null,
