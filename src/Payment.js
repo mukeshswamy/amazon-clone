@@ -7,6 +7,7 @@ import "./payment.css";
 import { useStateValue } from "./StateProvider";
 import { getBasketTotal } from "./reducer";
 import axios from "./axios";
+import {db} from "./firebase"
 
 function Payment() {
   const [{ basket, user }, dispatch] = useStateValue();
@@ -31,6 +32,7 @@ function Payment() {
     };
     getClientSecret();
   }, [basket]);
+  console.log('the secret is >>>', clientSecret);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,9 +43,22 @@ function Payment() {
           }
       }).then(({paymentIntent}) => {
         //   PaymentIntent = payment confirmation
+          db
+            .collection('users')
+            .doc(user?.uid)
+            .collection('orders')
+            .doc(paymentIntent.id)
+            .set({
+              basket:basket,
+              amount: paymentIntent.amount,
+              created: paymentIntent.created
+            })
           setSucceeded(true);
           setError(null)
           setProcessing(false);
+          dispatch({
+            type: 'EMPTY_BASKET',
+          })
           history.replace('/orders');
       })
   };
@@ -108,7 +123,7 @@ function Payment() {
                   value={getBasketTotal(basket)}
                   displayType={"text"}
                   thousandSeparator={true}
-                  prefix={"$"}
+                  prefix={"INR"}
                 />
                 <button disabled={processing || disabled || succeeded}>
                   <span>{processing ? <p>Processing..</p> : "Buy Now"}</span>
